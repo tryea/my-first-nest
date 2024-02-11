@@ -7,7 +7,7 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
-import { SchoolModule } from './school/school.module';
+import { SchoolModule } from "./school/school.module";
 
 @Module({
     imports: [
