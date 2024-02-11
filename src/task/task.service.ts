@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { CreateTaskDto } from "./dto/create-task.dto";
 
 @Injectable()
 export class TaskService {
@@ -6,9 +7,9 @@ export class TaskService {
         return [{ id: 1, title: "Create Todo" }];
     }
 
-    async createTask() {
+    async createTask(data: CreateTaskDto) {
         return {
-            message: "Task created successfully",
+            message: `Task '${data.task_name}' created successfully`,
         };
     }
 }
