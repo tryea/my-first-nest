@@ -5,7 +5,10 @@ import { tasks } from "./data/tasks";
 @Injectable()
 export class TaskService {
     getAllTask() {
-        return tasks;
+        return {
+            message: "Get All Tasks Success",
+            data: tasks,
+        };
     }
 
     async createTask(data: CreateTaskDto) {
@@ -15,8 +18,20 @@ export class TaskService {
     }
 
     async getTaskById(id: number) {
-        return tasks.find((item) => {
+        const task = tasks.find((item) => {
             return item.id === id;
         });
+
+        if (!task) {
+            return {
+                message: "Task Not Found",
+                data: null,
+            };
+        }
+
+        return {
+            message: "Get Task Success",
+            data: task,
+        };
     }
 }
