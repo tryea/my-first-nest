@@ -16,27 +16,50 @@ export class SchoolController {
     constructor(private readonly schoolService: SchoolService) {}
 
     @Post()
-    create(@Body() createSchoolDto: CreateSchoolDto) {
-        return this.schoolService.create(createSchoolDto);
+    async create(@Body() createSchoolDto: CreateSchoolDto) {
+        const school = await this.schoolService.create(createSchoolDto);
+        return {
+            message: "Create School Success",
+            data: school,
+        };
     }
 
     @Get()
-    findAll() {
-        return this.schoolService.findAll();
+    async findAll() {
+        const schools = await this.schoolService.findAll();
+        return {
+            message: "Get All School List Success",
+            data: schools,
+        };
     }
 
     @Get(":id")
-    findOne(@Param("id") id: string) {
-        return this.schoolService.findOne(+id);
+    async findOne(@Param("id") id: string) {
+        const school = await this.schoolService.findOne(+id);
+        return {
+            message: "Get School Data Success",
+            data: school,
+        };
     }
 
     @Patch(":id")
-    update(@Param("id") id: string, @Body() updateSchoolDto: UpdateSchoolDto) {
-        return this.schoolService.update(+id, updateSchoolDto);
+    async update(
+        @Param("id") id: string,
+        @Body() updateSchoolDto: UpdateSchoolDto,
+    ) {
+        const school = await this.schoolService.update(+id, updateSchoolDto);
+        return {
+            message: "Update School Data Success",
+            data: school,
+        };
     }
 
     @Delete(":id")
-    remove(@Param("id") id: string) {
-        return this.schoolService.remove(+id);
+    async remove(@Param("id") id: string) {
+        const school = await this.schoolService.remove(+id);
+        return {
+            message: "Delete School Data Success",
+            data: school,
+        };
     }
 }
