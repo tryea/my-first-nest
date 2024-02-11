@@ -44,11 +44,21 @@ export class TaskController {
 
     @Patch(":id")
     async updateTaskById(@Param("id") id: string, @Body() body: UpdateTaskDto) {
-        return await this.taskService.updateTaskById(+id, body);
+        const task = await this.taskService.updateTaskById(+id, body);
+
+        return {
+            message: `Update Task id ${id} Success`,
+            data: task,
+        };
     }
 
     @Delete(":id")
     async deleteTaskById(@Param("id") id: string) {
-        return await this.taskService.deleteTaskById(+id);
+        const task = await this.taskService.deleteTaskById(+id);
+
+        return {
+            message: `Delete Task id ${id} Success`,
+            data: task,
+        };
     }
 }

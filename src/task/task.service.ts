@@ -22,30 +22,26 @@ export class TaskService {
     }
 
     async updateTaskById(id: number, data: CreateTaskDto) {
-        const task = tasks.find((item) => {
-            return item.id === id;
+        const task = await this.prisma.tasks.findFirst({ where: { id: id } });
+
+        const updatedTask = await this.prisma.tasks.update({
+            where: { id },
+            data: {
+                task_name: data.task_name,
+                task_description: data.task_description,
+            },
         });
 
-        if (!task) {
-            return {
-                message: "Task Not Found",
-                data: null,
-            };
-        }
-
-        task.title = data.task_name;
-        task.description = data.task_description;
-
-        return {
-            message: `Update Task id ${id} Success`,
-            data: null,
-        };
+        return updatedTask;
     }
 
     async deleteTaskById(id: number) {
-        return {
-            message: `Delete Task id ${id} Success`,
-            data: null,
-        };
+        const task = await this.prisma.tasks.findFirst({ where: { id: id } });
+
+        const deletedTask = await this.prisma.tasks.delete({
+            where: { id },
+        });
+
+        return deletedTask;
     }
 }
