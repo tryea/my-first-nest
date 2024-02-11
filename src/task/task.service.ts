@@ -24,12 +24,18 @@ export class TaskService {
     async updateTaskById(id: number, data: CreateTaskDto) {
         const task = await this.prisma.tasks.findFirst({ where: { id: id } });
 
+        const updateData = {};
+        if (data.task_description) {
+            updateData["task_description"] = data.task_description;
+        }
+
+        if (data.task_name) {
+            updateData["task_name"] = data.task_name;
+        }
+
         const updatedTask = await this.prisma.tasks.update({
             where: { id },
-            data: {
-                task_name: data.task_name,
-                task_description: data.task_description,
-            },
+            data: updateData,
         });
 
         return updatedTask;

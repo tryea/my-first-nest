@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 export class UpdateTaskDto {
-    @IsNotEmpty() // inject validation
+    @IsOptional() // inject validation
     @IsString() // inject validation
     task_name: string;
 
-    @IsNotEmpty() // inject validation
+    @IsOptional() // inject validation
     @IsString() // inject validation
     task_description: string;
 }
