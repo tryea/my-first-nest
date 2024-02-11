@@ -16,21 +16,9 @@ export class TaskService {
     }
 
     async getTaskById(id: number) {
-        const task = tasks.find((item) => {
-            return item.id === id;
-        });
+        const task = await this.prisma.tasks.findFirst({ where: { id: id } });
 
-        if (!task) {
-            return {
-                message: "Task Not Found",
-                data: null,
-            };
-        }
-
-        return {
-            message: "Get Task Success",
-            data: task,
-        };
+        return task;
     }
 
     async updateTaskById(id: number, data: CreateTaskDto) {

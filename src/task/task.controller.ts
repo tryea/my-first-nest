@@ -35,7 +35,11 @@ export class TaskController {
 
     @Get(":id")
     async getTaskById(@Param("id") id: string) {
-        return await this.taskService.getTaskById(+id);
+        const task = await this.taskService.getTaskById(+id);
+        return {
+            message: "Get Task Success",
+            data: task,
+        };
     }
 
     @Patch(":id")
