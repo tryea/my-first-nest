@@ -34,4 +34,32 @@ export class TaskService {
             data: task,
         };
     }
+
+    async updateTaskById(id: number, data: CreateTaskDto) {
+        const task = tasks.find((item) => {
+            return item.id === id;
+        });
+
+        if (!task) {
+            return {
+                message: "Task Not Found",
+                data: null,
+            };
+        }
+
+        task.title = data.task_name;
+        task.description = data.task_description;
+
+        return {
+            message: `Update Task id ${id} Success`,
+            data: null,
+        };
+    }
+
+    async deleteTaskById(id: number) {
+        return {
+            message: `Delete Task id ${id} Success`,
+            data: null,
+        };
+    }
 }
