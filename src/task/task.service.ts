@@ -1,6 +1,5 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateTaskDto } from "./dto/create-task.dto";
-import { tasks } from "./data/tasks";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
@@ -18,11 +17,25 @@ export class TaskService {
     async getTaskById(id: number) {
         const task = await this.prisma.tasks.findFirst({ where: { id: id } });
 
+        if (!task) {
+            throw new HttpException(
+                { message: "Task tidak ditemukan" },
+                HttpStatus.NOT_FOUND,
+            );
+        }
+
         return task;
     }
 
     async updateTaskById(id: number, data: CreateTaskDto) {
         const task = await this.prisma.tasks.findFirst({ where: { id: id } });
+
+        if (!task) {
+            throw new HttpException(
+                { message: "Task tidak ditemukan" },
+                HttpStatus.NOT_FOUND,
+            );
+        }
 
         const updateData = {};
         if (data.task_description) {
@@ -43,6 +56,13 @@ export class TaskService {
 
     async deleteTaskById(id: number) {
         const task = await this.prisma.tasks.findFirst({ where: { id: id } });
+
+        if (!task) {
+            throw new HttpException(
+                { message: "Task tidak ditemukan" },
+                HttpStatus.NOT_FOUND,
+            );
+        }
 
         const deletedTask = await this.prisma.tasks.delete({
             where: { id },
