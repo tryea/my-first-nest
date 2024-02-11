@@ -16,8 +16,12 @@ export class TaskController {
     constructor(private taskService: TaskService) {}
 
     @Get()
-    getTask() {
-        return this.taskService.getAllTask();
+    async getTask() {
+        const tasks = await this.taskService.getAllTask();
+        return {
+            message: "Get All Tasks Success",
+            data: tasks,
+        };
     }
 
     @Post()

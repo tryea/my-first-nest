@@ -7,11 +7,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class TaskService {
     constructor(private prisma: PrismaService) {}
 
-    getAllTask() {
-        return {
-            message: "Get All Tasks Success",
-            data: tasks,
-        };
+    async getAllTask() {
+        return await this.prisma.tasks.findMany();
     }
 
     async createTask(data: CreateTaskDto) {
