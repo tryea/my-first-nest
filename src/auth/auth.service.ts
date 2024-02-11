@@ -3,10 +3,27 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { RegisterDto } from "./dto/register.dto";
 import { compare, hash } from "bcrypt";
 import { LoginDto } from "./dto/login.dto";
+import { JwtService } from "@nestjs/jwt";
+import { jwt_config } from "src/config/jwt_config";
 
 @Injectable()
 export class AuthService {
-    constructor(private prisma: PrismaService) {}
+    constructor(
+        private prisma: PrismaService,
+        private jwtService: JwtService,
+    ) {}
+
+    /**
+     * Generate JWT Token
+     * @param payload
+     * @returns
+     */
+    generateJWT(payload: any) {
+        return this.jwtService.sign(payload, {
+            secret: jwt_config.secret,
+            expiresIn: jwt_config.expired,
+        });
+    }
 
     async register(data: RegisterDto) {
         const checkUserExists = await this.prisma.users.findFirst({
@@ -57,9 +74,16 @@ export class AuthService {
         );
 
         if (checkPassword) {
+            const accessToken = this.generateJWT({
+                sub: checkUserExists.id,
+                name: checkUserExists.name,
+                email: checkUserExists.email,
+            });
+
             return {
                 statusCode: 200,
                 message: "Login berhasil",
+                accessToken: accessToken,
             };
         } else {
             throw new HttpException(
