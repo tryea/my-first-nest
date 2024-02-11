@@ -6,6 +6,8 @@ import {
     Param,
     Patch,
     Post,
+    UsePipes,
+    ValidationPipe,
 } from "@nestjs/common";
 import { TaskService } from "./task.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
@@ -24,6 +26,8 @@ export class TaskController {
         };
     }
 
+    // UsePipes here is add individual pipe to specific function
+    @UsePipes(ValidationPipe)
     @Post()
     async createTask(@Body() body: CreateTaskDto) {
         const data = await this.taskService.createTask(body);
