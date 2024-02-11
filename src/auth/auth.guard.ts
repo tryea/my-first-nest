@@ -12,6 +12,7 @@ export class AuthGuard extends AuthGuardPassport("jwt") {
     }
 
     handleRequest(err, user, info) {
+        console.log(info);
         if (err || !user) {
             throw err || new UnauthorizedException();
         }

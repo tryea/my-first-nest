@@ -110,4 +110,38 @@ export class AuthService {
             },
         });
     }
+
+    /**
+     * Upload Avatar
+     * @param user_id
+     * @param avatar
+     * @returns
+     */
+    async uploadAvatar(user_id: number, avatar) {
+        const checkUserExists = await this.prisma.users.findFirst({
+            where: {
+                id: user_id,
+            },
+        });
+
+        if (checkUserExists) {
+            const updateAvatar = await this.prisma.users.update({
+                data: {
+                    avatar: avatar,
+                },
+                where: {
+                    id: user_id,
+                },
+            });
+
+            if (updateAvatar) {
+                return {
+                    statusCode: 200,
+                    message: "Upload avatar berhasil",
+                };
+            }
+        }
+
+        throw new HttpException("Bad request", HttpStatus.BAD_REQUEST);
+    }
 }
