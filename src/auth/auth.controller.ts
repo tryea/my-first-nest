@@ -14,7 +14,7 @@ import { LoginDto } from "./dto/login.dto";
 import { AuthGuard } from "./auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Auth")
 @Controller("auth")
@@ -31,6 +31,7 @@ export class AuthController {
         return await this.authService.login(data);
     }
 
+    @ApiBearerAuth("accessToken")
     @UseGuards(AuthGuard)
     @Get("profile")
     async profile(@Req() req) {
@@ -42,6 +43,19 @@ export class AuthController {
         };
     }
 
+    @ApiBearerAuth("accessToken")
+    @ApiConsumes("multipart/form-data")
+    @ApiBody({
+        schema: {
+            type: "object",
+            properties: {
+                avatar: {
+                    type: "string",
+                    format: "binary",
+                },
+            },
+        },
+    })
     @UseGuards(AuthGuard)
     @UseInterceptors(
         FileInterceptor("avatar", {
