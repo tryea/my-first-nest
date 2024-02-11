@@ -1,9 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { tasks } from "./data/tasks";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class TaskService {
+    constructor(private prisma: PrismaService) {}
+
     getAllTask() {
         return {
             message: "Get All Tasks Success",
@@ -12,9 +15,7 @@ export class TaskService {
     }
 
     async createTask(data: CreateTaskDto) {
-        return {
-            message: `Task '${data.task_name}' created successfully`,
-        };
+        return await this.prisma.tasks.create({ data: data });
     }
 
     async getTaskById(id: number) {

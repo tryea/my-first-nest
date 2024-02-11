@@ -22,7 +22,11 @@ export class TaskController {
 
     @Post()
     async createTask(@Body() body: CreateTaskDto) {
-        return await this.taskService.createTask(body);
+        const data = await this.taskService.createTask(body);
+        return {
+            message: `Task '${data.task_name}' created successfully`,
+            data: data,
+        };
     }
 
     @Get(":id")
