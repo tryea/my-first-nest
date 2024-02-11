@@ -1,21 +1,28 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { PrismaService } from "src/prisma/prisma.service";
+import { UpdateTaskDto } from "./dto/update-task.dto";
 
 @Injectable()
 export class TaskService {
     constructor(private prisma: PrismaService) {}
 
-    async getAllTask() {
-        return await this.prisma.tasks.findMany();
+    async getAllTask(user_id: number) {
+        return await this.prisma.tasks.findMany({
+            where: {
+                user_id,
+            },
+        });
     }
 
     async createTask(data: CreateTaskDto) {
         return await this.prisma.tasks.create({ data: data });
     }
 
-    async getTaskById(id: number) {
-        const task = await this.prisma.tasks.findFirst({ where: { id: id } });
+    async getTaskById(id: number, user_id: number) {
+        const task = await this.prisma.tasks.findFirst({
+            where: { id: id, user_id },
+        });
 
         if (!task) {
             throw new HttpException(
@@ -27,7 +34,7 @@ export class TaskService {
         return task;
     }
 
-    async updateTaskById(id: number, data: CreateTaskDto) {
+    async updateTaskById(id: number, data: UpdateTaskDto) {
         const task = await this.prisma.tasks.findFirst({ where: { id: id } });
 
         if (!task) {
@@ -54,8 +61,10 @@ export class TaskService {
         return updatedTask;
     }
 
-    async deleteTaskById(id: number) {
-        const task = await this.prisma.tasks.findFirst({ where: { id: id } });
+    async deleteTaskById(id: number, user_id: number) {
+        const task = await this.prisma.tasks.findFirst({
+            where: { id: id, user_id },
+        });
 
         if (!task) {
             throw new HttpException(
