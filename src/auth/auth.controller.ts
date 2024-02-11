@@ -14,7 +14,9 @@ import { LoginDto } from "./dto/login.dto";
 import { AuthGuard } from "./auth.guard";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
     constructor(private authService: AuthService) {}
